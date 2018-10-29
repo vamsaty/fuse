@@ -62,8 +62,10 @@ int fs_readdir( const char *path, void *buffer, fuse_fill_dir_t filler, off_t of
 	
 	if(dpath == "/"){
 
-		for(int i=0;i < root->noc;i++){
-			filler(buffer,(root->children[i]->name).c_str(),NULL,0);
+		for(int i=0;i < root->deadEnd;i++){	//change
+			if(root->children[i] != NULL){
+				filler(buffer,(root->children[i]->name).c_str(),NULL,0);
+			}
 		}
 
 	}else{
@@ -72,8 +74,10 @@ int fs_readdir( const char *path, void *buffer, fuse_fill_dir_t filler, off_t of
 		if(dir_node == NULL){
 			return -ENOENT;
 		}
-		for(int i=0;i < dir_node->noc;i++){
-			filler(buffer,(dir_node->children[i]->name).c_str(),NULL,0);
+		for(int i=0;i < dir_node->deadEnd;i++){	//change
+			if(dir_node->children[i] != NULL){
+				filler(buffer,(dir_node->children[i]->name).c_str(),NULL,0);
+			}
 		}
 
 	}
@@ -93,26 +97,18 @@ int fs_read(const char *path, char *buffer, size_t size, off_t offset,struct fus
 	dir_node = searcher(root,path);
 
 	if(dir_node != NULL){
-		for(int i=0;i < dir_node->noc;i++){
-			if(dir_node->children[i] != NULL){
-				if(dir_node->children[i]->name == dir_name){
-					select.assign(dir_node->children[i]->data);
-				}
-			}
+		if(!dir_node->isDir){
+			dir_node->a_time = time(NULL);
+			int len = dir_node->data.length();
+			if(!len)
+				return 0;
+			memcpy(buffer, (dir_node->data).c_str() + offset, size);
+			return size;
 		}
 	}
-	int len = select.length();
 	
-	if(len == 0){
-		cout<<"Empty\n";
-	}
-
-	if(!len)
-		return -1;
+	return -ENOENT;
 	
-	memcpy( buffer, select.c_str() + offset, size );
-	
-	return len - offset;
 }
 
 int fs_mkdir(const char *path,mode_t mode){
@@ -134,20 +130,101 @@ int fs_mknod(const char *path,mode_t mode,dev_t dev){
 	return 0;	
 }
 
-
-
-
-
-
 int fs_write(const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi){
 
 	string dpath(path);
-
 	FSMD *dir_node = NULL;
 
-	
+	dir_node = searcher(root,path);
+	if(dir_node != NULL){
+		if(!dir_node->isDir){
 
+			dir_node->a_time = time( NULL );
+			dir_node->m_time = time(NULL);
+			dir_node->c_time = time(NULL);
+			
+			dir_node->data.append(buf);
+			
+			cout<<"data -> "<<dir_node->data<<"\n\n";
 
+			cout<<dir_node->data.length()<<"\n";
+
+			memset((char *)buf, 0, strlen(buf));
+			return size;
+		}
+
+	}
 	
 	return -ENOENT;
 }
+
+
+int fs_open(const char *path, struct fuse_file_info *fi){
+	
+	FSMD *dir_node = NULL;
+	dir_node = searcher(root,path);
+	if(dir_node != NULL){
+		if(!dir_node->isDir){
+			dir_node->permissions = (S_IFREG) | 777;
+		}
+	}
+
+	return 0;
+}
+
+
+int fs_rmdir(const char * path){
+	printf("GETATTR CALLED\n");
+	
+	string dpath(path);
+	
+	if(dpath == "/"){
+		cout<<"Cannot delete ROOT\n";
+		return -ENOTEMPTY;
+	}
+	
+	FSMD * dir_node = searcher(root,path);
+	int ret = delete_node(dir_node);
+	
+	if(ret < 0){
+		return -ENOTEMPTY;
+	}
+
+	return 0;
+}
+
+
+int fs_unlink(const char *path){
+	string dpath(path);
+	FSMD *dir_node = searcher(root,path);
+	if(dir_node == NULL || dir_node->isDir)
+		return 0;
+	
+	delete_file(dir_node);
+
+	return 0;
+}
+
+
+// int fs_rename(const char* from, const char* to){
+// 	FSMD *dir_node = NULL;
+
+
+// 	src_node = searcher(root,from);
+// 	if(dir_node == NULL){
+// 		return -ENOENT;
+// 	}
+
+// 	dest_node = searcher(root,to);
+	
+// 	if(dest_node != NULL){
+// 		if(src_node->isDir && !dest_node->isDir){
+// 			return -EPERM;
+// 		}
+// 	}
+// 	move_node(from,to,dir_node->parent);
+// 	if(!dest_node->isDir){
+
+// 	}
+
+// }

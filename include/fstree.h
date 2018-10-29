@@ -41,7 +41,8 @@ struct sss_metadata{
 
 	int noc;
 	int nof;
-	
+	ll deadEnd;
+
 	time_t a_time;                  // Access time
     time_t m_time;                  // Modified time
     time_t c_time;                  // Status change time
@@ -69,16 +70,22 @@ extern FSMD * root;
 // TREE OPERATIONS / METHODS
 
 
-FSMD *make_node(string path,const string name,bool dir,FSMD *parent);
+FSMD *make_node(string path,const string&,bool dir,FSMD *);
 FSMD *make_dir_node(string name);
 FSMD *make_file_node(string name);
 FSMD *search(FSMD*,string);
 FSMD *searcher(FSMD*,string);
 // FSMD *searcher(FSMD*,string&);
-void insert_node(const string,bool isDir);
-void insert_file(const string);
+void insert_node(const string&,bool isDir);
+void insert_file(const string&);
 string getDir(string &s);
 FSMD *create_tree();
 void temp_files(FSMD **);
+
+int delete_file(FSMD *);
+int delete_node(FSMD *);
+// void move_node(const string &,const string &);
+
+
 
 #endif

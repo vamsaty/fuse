@@ -24,20 +24,21 @@ static struct fuse_operations operations = {
 /* .init        = fs_init,
        .destroy     = fs_destroy,
 */
-       .getattr     = fs_getattr,
+    .getattr     = fs_getattr,
 
 
 /*
     .fgetattr    = fs_fgetattr,
     .access      = fs_access,
     .readlink    = fs_readlink,
-    */
+*/
     .mknod       = fs_mknod,
-.mkdir       = fs_mkdir,    
-/*
-    .symlink     = fs_symlink,
+    .mkdir       = fs_mkdir,
+
+    // .symlink     = fs_symlink,
     .unlink      = fs_unlink,
     .rmdir       = fs_rmdir,
+/*
     .rename      = fs_rename,
     .link        = fs_link,
     .chmod       = fs_chmod,
@@ -46,16 +47,17 @@ static struct fuse_operations operations = {
     .ftruncate   = fs_ftruncate,
     .utimens     = fs_utimens,
     .create      = fs_create,
-    .open        = fs_open,
+    
 */
+    .open        = fs_open,
     .read        = fs_read,
-    // .write       = fs_write,
+    .write       = fs_write,
 /*
      .statfs      = fs_statfs,
      .release     = fs_release,
      .opendir     = fs_opendir,
 */
-       .readdir     = fs_readdir,
+    .readdir     = fs_readdir,
 /*
     .releasedir  = fs_releasedir,
     .fsync       = fs_fsync,
