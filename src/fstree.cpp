@@ -7,11 +7,13 @@ FSMD *make_node(string path,const string& name,bool dir,FSMD *parent){
 	time_t at,bt,ct,mt;
 	FSMD *nd = MALL(FSMD, 1);
 
+
 	nd->isDir = dir;
 	nd->permissions = (dir)? (S_IFDIR | 0777) : (S_IFREG | 0777);
 
 	nd->name.assign(name);
-	nd->path.assign(path);
+	// nd->path.assign(path);
+	cout<<"heeeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrrrrrre\n";
 
 	nd->size = 0;
 	nd->inode_number = 0;
@@ -29,6 +31,8 @@ FSMD *make_node(string path,const string& name,bool dir,FSMD *parent){
 	
 	nd->children = NULL;
 	nd->parent = parent;
+
+cout<<"heeeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrrrrrre\n";
 
 	return nd;
 }
@@ -173,7 +177,6 @@ void insert_node(const string &path, bool isDir){
 
 
 void temp_files(FSMD **d){
-	
 	// cout<<"heeeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrrrrrre\n";
 	// cout<<root->path<<"her"<<"\n";
 	const string dir(root->path+"her");
@@ -215,7 +218,7 @@ int delete_file(FSMD *r){
 
 			r->parent->children[i] = NULL;
 			r->parent->noc--;
-	
+			r->data.clear();
 			free(r);		
 			return 0;
 		}
