@@ -204,28 +204,3 @@ int fs_unlink(const char *path){
 
 	return 0;
 }
-
-
-
-// int fs_rename(const char* from, const char* to){
-// 	FSMD *dir_node = NULL;
-
-
-// 	src_node = searcher(root,from);
-// 	if(dir_node == NULL){
-// 		return -ENOENT;
-// 	}
-
-// 	dest_node = searcher(root,to);
-	
-// 	if(dest_node != NULL){
-// 		if(src_node->isDir && !dest_node->isDir){
-// 			return -EPERM;
-// 		}
-// 	}
-// 	move_node(from,to,dir_node->parent);
-// 	if(!dest_node->isDir){
-
-// 	}
-
-// }
