@@ -10,7 +10,6 @@
 
 using namespace std;
 
-//what is this then?
 extern FSMD* root;
 
 int fs_getattr(const char *path, struct stat *st);
