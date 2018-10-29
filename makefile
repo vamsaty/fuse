@@ -1,4 +1,4 @@
-COMPILER = g++
+COMPILER = g++ -std=c++11
 FILESYSTEM_FILES = src/fsmain.cpp src/fsoperations.cpp src/fstree.cpp
 
 build: $(FILESYSTEM_FILES)
