@@ -37,8 +37,9 @@ FSMD *create_tree(){
 	return make_node("/","root",1,NULL);
 }
 
+//gets the directory_name plus it changes the path value
 string getDir(string &path){
-	//gets the directory_name plus it changes the path value
+
 	// root/xyz/abc
 
 	string dir(path);
@@ -181,9 +182,12 @@ void temp_files(FSMD **d){
 }
 
 int delete_node(FSMD* r){
+
+	// don't delete if it is a file
 	if(r == NULL || !r->isDir || r->noc)
 		return 0;
 
+	// traverse the parent for the node
 	for(int i=0;i < r->parent->deadEnd;i++){	//change
 		if(r->parent->children[i] == r){
 	
@@ -198,15 +202,15 @@ int delete_node(FSMD* r){
 	return 1;
 }
 
-
 int delete_file(FSMD *r){
-	// don't delete directory
-	if(r->isDir)
+	
+	// don't delete if it is a directory
+	if(r->isDir || r == NULL || r->noc)
 		return 0;
 
 	// traverse the parent for the node
 	for(int i=0;i < r->parent->deadEnd;i++){	//change
-		
+
 		if(r->parent->children[i] == r){
 
 			r->parent->children[i] = NULL;

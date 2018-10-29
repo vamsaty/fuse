@@ -12,8 +12,8 @@ int fs_getattr( const char *path, struct stat *st ){
 	dir_str = getDir(dpath);	
 	
 	
-	cout<<"CALLED GETATTR\t"<<path<<"\t"<<dpath<<"\t"<<dir_str<<"\n";
-	
+	// cout<<"CALLED GETATTR\t"<<path<<"\t"<<dpath<<"\t"<<dir_str<<"\n";
+	cout<<"CALLED GETATTR\n";
 
 	if(dir_str == "/"){
 		//check if the directory is root
@@ -71,9 +71,9 @@ int fs_readdir( const char *path, void *buffer, fuse_fill_dir_t filler, off_t of
 	}else{
 		//here dpath is same as path
 		FSMD *dir_node = searcher(root,dpath);
-		if(dir_node == NULL){
+		if(dir_node == NULL)
 			return -ENOENT;
-		}
+		
 		for(int i=0;i < dir_node->deadEnd;i++){	//change
 			if(dir_node->children[i] != NULL){
 				filler(buffer,(dir_node->children[i]->name).c_str(),NULL,0);
@@ -204,6 +204,7 @@ int fs_unlink(const char *path){
 
 	return 0;
 }
+
 
 
 // int fs_rename(const char* from, const char* to){

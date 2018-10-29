@@ -73,8 +73,9 @@ static struct fuse_operations operations = {
 
 
 int main( int argc, char *argv[] ){
-	// cout<<"Asdffffffffffffffffffffffffffff";
+
     root = create_tree();
-    temp_files(&root);
+    // temp_files(&root);
 	return fuse_main( argc, argv, &operations, NULL );
+
 }

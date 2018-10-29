@@ -73,9 +73,9 @@ extern FSMD * root;
 FSMD *make_node(string path,const string&,bool dir,FSMD *);
 FSMD *make_dir_node(string name);
 FSMD *make_file_node(string name);
-FSMD *search(FSMD*,string);
+
 FSMD *searcher(FSMD*,string);
-// FSMD *searcher(FSMD*,string&);
+
 void insert_node(const string&,bool isDir);
 void insert_file(const string&);
 string getDir(string &s);
@@ -84,8 +84,6 @@ void temp_files(FSMD **);
 
 int delete_file(FSMD *);
 int delete_node(FSMD *);
-// void move_node(const string &,const string &);
-
 
 
 #endif
