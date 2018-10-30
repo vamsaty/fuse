@@ -10,14 +10,13 @@ int fs_getattr( const char *path, struct stat *st ){
 	dir_str = getDir(dpath);	
 	
 	cout<<"CALLED GETATTR\n";
-
+	cout<<dir_str<<"\n";
 	if(dir_str == "/"){
 		//check if the directory is root
 		dir_node = root;
 	}else if(dir_str.length() > 1){
 		// search for the node
 		dir_node = searcher(root,path);
-
 	}
 	//if not found, return -ENOENT, to take actions, allows mkdir
 	if(dir_node == NULL){
@@ -77,6 +76,9 @@ int fs_readdir( const char *path, void *buffer, fuse_fill_dir_t filler, off_t of
 			filler(buffer,(dir_node->children[i]->name).c_str(),NULL,0);
 		}
 	}
+	
+	// int check = writeToFile((char*)path,root);
+
 
 	return 0;
 }
@@ -99,9 +101,9 @@ int fs_read(const char *path, char *buffer, size_t size, off_t offset,struct fus
 			
 			if(!len)
 				return 0;
-			
-			cout<<"*********************************************OFFSET*************************************\n";
-			cout<<offset<<"\n";
+
+			// cout<<"*********************************************OFFSET*************************************\n";
+			// cout<<offset<<"\n";
 			cout<<"BUFFER\t\t"<<buffer<<"\n\n";
 			memcpy(buffer, (dir_node->data).c_str() + offset, size);
 			return size;
@@ -126,9 +128,9 @@ int fs_mknod(const char *path,mode_t mode,dev_t dev){
 	cout<<"CALLED MKNOD\t\t\n";
 
 	const string dpath(path);
-	
+
 	insert_node(dpath,0);
-	return 0;	
+	return 0;
 }
 
 int fs_write(const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi){

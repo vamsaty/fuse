@@ -11,8 +11,11 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <time.h>
+
+// #include "../include/persistence.h"
 #include "../include/fstree.h"
 #include "../include/fsoperations.h"
+
 using namespace std;
 
 FSMD *root ;
@@ -29,12 +32,21 @@ static struct fuse_operations operations = {
     .readdir     = fs_readdir,
 };
 
-
+int first = 0;
 
 int main( int argc, char *argv[] ){
 
     root = create_tree();
-    // temp_files(&root);
-	return fuse_main( argc, argv, &operations, NULL );
+    
+    // if(!(first++)){
+    //     char sep[] = "../.data";
+    //     char *p = sep;
+    //     root = readFromFile(p);
+    //     if (root == NULL){
+    //         printf("hoooooooooopppllllllaaaaaaaa");
+    //         root = create_tree();
+    //     }
+    // }
 
+	return fuse_main( argc, argv, &operations, NULL );
 }

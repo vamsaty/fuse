@@ -7,19 +7,18 @@ FSMD *make_node(string path,const string& name,bool dir,FSMD *parent){
 	time_t at,bt,ct,mt;
 	FSMD *nd = MALL(FSMD, 1);
 
-
 	nd->isDir = dir;
 	nd->permissions = (dir)? (S_IFDIR | 0777) : (S_IFREG | 0777);
 
 	nd->name.assign(name);
-	// nd->path.assign(path);
-	cout<<"heeeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrrrrrre\n";
+	nd->data;
 
 	nd->size = 0;
 	nd->inode_number = 0;
 	nd->deadEnd = 0;
 	nd->noc = 0;
 	nd->nof = 0;
+	nd->isDeleted = 0;
 
 	nd->group_id = getgid();
 	nd->user_id = getuid();
@@ -29,10 +28,8 @@ FSMD *make_node(string path,const string& name,bool dir,FSMD *parent){
 	nd->c_time = time(&ct);
 	nd->b_time = time(&bt);
 	
-	nd->children = NULL;
+	nd->children = MALL(FSMD*,100);
 	nd->parent = parent;
-
-cout<<"heeeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrrrrrre\n";
 
 	return nd;
 }
@@ -44,7 +41,7 @@ FSMD *create_tree(){
 //gets the directory_name plus it changes the path value
 string getDir(string &path){
 
-	// root/xyz/abc
+	// root /xyz/abc
 
 	string dir(path);
 	string final;
@@ -122,8 +119,6 @@ FSMD *searcher(FSMD *node, string path){
 }
 
 
-
-
 void insert_node(const string &path, bool isDir){
 	
 
@@ -175,17 +170,7 @@ void insert_node(const string &path, bool isDir){
 
 }
 
-
-void temp_files(FSMD **d){
-	// cout<<"heeeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrrrrrre\n";
-	// cout<<root->path<<"her"<<"\n";
-	const string dir(root->path+"her");
-	insert_node(dir,1);
-
-}
-
 int delete_node(FSMD* r){
-
 	// don't delete if it is a file
 	if(r == NULL || !r->isDir || r->noc)
 		return 0;
@@ -193,7 +178,7 @@ int delete_node(FSMD* r){
 	// traverse the parent for the node
 	for(int i=0;i < r->parent->deadEnd;i++){	//change
 		if(r->parent->children[i] == r){
-	
+			r->parent->children[i]->name.clear();
 			r->parent->children[i] = NULL;
 			r->parent->noc--;
 	

@@ -28,13 +28,15 @@ struct sss_metadata{
 	// string path;
 	// string name;
 	// string content;
-	string path;
+	// string path;
 	string name;
 	string data;
+
 	off_t size;
 	long int offset;
 	
 	bool isDir;
+	bool isDeleted;
 	mode_t permissions;
 	uid_t user_id;
 	gid_t group_id;
@@ -51,14 +53,41 @@ struct sss_metadata{
     unsigned long int inode_number; // Inode number of the node in disk    
     struct sss_metadata * parent;         // Pointer to parent node
     
-    set<struct sss_metadata*> chills;
+    // set<struct sss_metadata*> chills;
 
     struct sss_metadata ** children;      // Pointers to children nodes
 };
 
 
+typedef struct dataStruct{
+	char name[100];    
+    char data[1000];
+    // char path[1000];
+
+    off_t size;
+	long int offset;
+	
+	bool isDir;
+	bool isDeleted;
+	mode_t permissions;
+	uid_t user_id;
+	gid_t group_id;
+
+	int noc;
+	int nof;
+	ll deadEnd;
+
+	time_t a_time;                  // Access time
+    time_t m_time;                  // Modified time
+    time_t c_time;                  // Status change time
+    time_t b_time;                  // Creation time
+    
+
+}dataStruct;
+
 
 typedef struct sss_metadata FSMD;
+// typedef struct dataStruct dataStruct;
 
 extern FSMD * root;
 
@@ -85,5 +114,18 @@ void temp_files(FSMD **);
 int delete_file(FSMD *);
 int delete_node(FSMD *);
 
+
+
+dataStruct * copyTodataStruct(FSMD* nd);
+
+FSMD* copyToNode(dataStruct* ds);
+
+int writeOneToFile(FILE* fp);
+
+FSMD* readOneFromFile(FILE* fp);
+
+int writeToFile(char* filepath);
+
+FSMD* readFromFile(char* filepath);
 
 #endif
