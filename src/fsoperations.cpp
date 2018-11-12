@@ -349,23 +349,23 @@ int fs_rename (const char *old_name_path, const char *new_name_path){
 }
 
 
-int fs_rename (const char *old_name_path, const char *new_name_path){
+// int fs_rename (const char *old_name_path, const char *new_name_path){
 
-	FSMD *src = NULL,*dest = NULL;
-	src = searcher(root,old_name_path);
-	if(src == NULL)
-		return -ENOENT;
+// 	FSMD *src = NULL,*dest = NULL;
+// 	src = searcher(root,old_name_path);
+// 	if(src == NULL)
+// 		return -ENOENT;
 	
-	dest = searcher(root,new_name_path);
-	if(dest == NULL)
-		return -ENOENT;
+// 	dest = searcher(root,new_name_path);
+// 	if(dest == NULL)
+// 		return -ENOENT;
 
-	if(dest != NULL){
-		if(src->isDir && !dest->isDir){
-			return -EPERM;
-		}
-	}
-	shift_node(old_name_path,new_name_path);
+// 	if(dest != NULL){
+// 		if(src->isDir && !dest->isDir){
+// 			return -EPERM;
+// 		}
+// 	}
+// 	shift_node(old_name_path,new_name_path);
 
-	return 0;
-}
+// 	return 0;
+// }
