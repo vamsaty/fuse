@@ -128,4 +128,6 @@ int writeToFile(char* filepath);
 
 FSMD* readFromFile(char* filepath);
 
+// void shift_node(const char *old_name_path, const char *new_name_path);
+
 #endif

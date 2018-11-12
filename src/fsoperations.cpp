@@ -245,7 +245,8 @@ int fs_write(const char *path, const char *buf, size_t size, off_t offset, struc
 			dir_node->c_time = time(NULL);
 
 			dir_node->size = size+offset;
-			dir_node->data.resize(offset+size+1,'\0');
+			
+			dir_node->data.resize(offset+size+1);
 
 			for(int i=0;i<size;i++)
 				dir_node->data[offset+i] = buf[i];
@@ -270,20 +271,21 @@ int fs_truncate(const char *path, off_t size){
 	FSMD *dir_node = searcher(root,dpath);
 	string dir_name = getDir(dpath);
 	FSMD *parent_dir = searcher(root,dpath);
-
+	cout<<"here*********************************************************|\n";
 	if(dir_node != NULL){
+
 		if(size <= 0){
 			dir_node->data.clear();
 			dir_node->size = 0;
+
 		}else{
+
 			char *buffer = MALL(char,size+1);
 			dir_node->data.copy(buffer,0,size);
-
 			dir_node->data.clear();
-
 			dir_node->data.assign(buffer);
-
 			dir_node->size = size;
+
 		}
 		return 0;
 	}
@@ -334,7 +336,7 @@ int fs_rename (const char *old_name_path, const char *new_name_path){
 
     printf("old name=%s\n",old_name_path);
     printf("new name=%s\n",new_name_path);
-    //char *old_name = file_name(old_name_path);
+    
     FSMD *nd = searcher(root,old_name_path);
     string dpath(new_name_path);
     string new_name = getDir(dpath);
