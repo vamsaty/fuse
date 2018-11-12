@@ -217,7 +217,7 @@ int delete_file(FSMD *r){
 	return 0;
 
 }
-
+/*
 void shift_node(const char *old_name_path, const char *new_name_path){
 	string spath(old_name_path);
 	string dpath(new_name_path);
@@ -261,7 +261,7 @@ void shift_node(const char *old_name_path, const char *new_name_path){
 
 
 
-
+*/
 
 
 
