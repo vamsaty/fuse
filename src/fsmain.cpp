@@ -26,10 +26,14 @@ static struct fuse_operations operations = {
     .mkdir       = fs_mkdir,
     .unlink      = fs_unlink,
     .rmdir       = fs_rmdir,
+    .rename		 = fs_rename,
+    .chmod		 = fs_chmod,
+    .truncate	 = fs_truncate,
     .open        = fs_open,
     .read        = fs_read,
     .write       = fs_write,
     .readdir     = fs_readdir,
+    .access      = fs_access,
 };
 
 int first = 0;
@@ -37,16 +41,5 @@ int first = 0;
 int main( int argc, char *argv[] ){
 
     root = create_tree();
-    
-    // if(!(first++)){
-    //     char sep[] = "../.data";
-    //     char *p = sep;
-    //     root = readFromFile(p);
-    //     if (root == NULL){
-    //         printf("hoooooooooopppllllllaaaaaaaa");
-    //         root = create_tree();
-    //     }
-    // }
-
 	return fuse_main( argc, argv, &operations, NULL );
 }

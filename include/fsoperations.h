@@ -30,6 +30,14 @@ int fs_rmdir(const char * path);
 
 int fs_unlink(const char *path);
 
-// int fs_rename(const char* from, const char* to);
+int fs_statfs(const char* path, struct statvfs* stbuf);
+
+int fs_rename (const char *old_name_path, const char *new_name_path);
+
+int fs_access(const char * path, int mask);
+
+int fs_chmod(const char *path, mode_t newp);
+
+int fs_truncate(const char *path, off_t size);
 
 #endif

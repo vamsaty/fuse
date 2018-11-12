@@ -138,6 +138,8 @@ void insert_node(const string &path, bool isDir){
 		
 		root->children[root->deadEnd] = make_node(dpath,dir_name,isDir,root);//change
 		root->deadEnd++;//changed
+		if(!isDir)
+			dir_node->nof++;
 		root->noc++;
 
 	}else{
@@ -163,6 +165,8 @@ void insert_node(const string &path, bool isDir){
 		
 			dir_node->children[dir_node->deadEnd] = make_node(dpath,dir_name,isDir,dir_node);//change
 			dir_node->deadEnd++;	//change
+			if(!isDir)
+				dir_node->nof++;
 			dir_node->noc++;
 		}
 
@@ -173,7 +177,7 @@ void insert_node(const string &path, bool isDir){
 int delete_node(FSMD* r){
 	// don't delete if it is a file
 	if(r == NULL || !r->isDir || r->noc)
-		return 0;
+		return -1;
 
 	// traverse the parent for the node
 	for(int i=0;i < r->parent->deadEnd;i++){	//change
@@ -203,6 +207,7 @@ int delete_file(FSMD *r){
 
 			r->parent->children[i] = NULL;
 			r->parent->noc--;
+			r->parent->nof--;
 			r->data.clear();
 			free(r);		
 			return 0;
@@ -212,3 +217,51 @@ int delete_file(FSMD *r){
 	return 0;
 
 }
+
+void shift_node(const char *old_name_path, const char *new_name_path){
+	string spath(old_name_path);
+	string dpath(new_name_path);
+
+	FSMD *src = searcher(root,spath);
+	FSMD *dest = searcher(root,dpath);
+
+	if(src && dest){
+		if(dest->isDir){
+			delete_node(dest);
+		}else{
+			delete_file(dest);
+		}
+	}
+
+	if(src != NULL){
+		FSMD *src_parent = NULL;
+		FSMD *dest_parent = NULL;
+		
+		string src_dir_name = getDir(spath);
+		string dest_dir_name = getDir(dpath);
+
+		src_parent = searcher(root,spath);
+
+		if(searcher(root,new_name_path) == NULL){
+			flag = 1;
+		}
+		dest_parent = searcher(root,dpath);
+
+
+		dest_parent->noc++;
+		dest_parent->c_time = time(NULL);
+
+		dest_parent->children = REALL(FSMD*,dest_parent->children,dest_parent->noc);
+		src->a_time = time(NULL);
+
+	}
+
+
+}
+
+
+
+
+
+
+
